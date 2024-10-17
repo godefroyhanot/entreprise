@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use DateTime;
 use App\Entity\Facturation;
 use Doctrine\Persistence\ObjectManager;
@@ -15,18 +16,20 @@ class FacturationFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $now = new DateTime();
+        // Instanciation de Faker
+        $faker = Factory::create('fr_FR');
+
         $facturations = [];
 
         for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
             $facturation = new Facturation();
             $facturation
-                ->setNumber("Facture #" . $i)
-                ->setClient("Client #" . $i)
-                ->setContrat("Contrat #" . $i)
-                ->setCreatedAt($now)
-                ->setUpdateAt($now)
-                ->setStatus(1);
+                ->setNumber($faker->unique()->numerify('Facture ###'))
+                ->setClient($faker->name)
+                ->setContrat($faker->company)
+                ->setCreatedAt($faker->dateTimeThisYear)
+                ->setUpdateAt($faker->dateTimeThisYear)
+                ->setStatus($faker->randomElement([0, 1]));
 
             $manager->persist($facturation);
             $this->addReference(self::PREFIX . $i, $facturation);
