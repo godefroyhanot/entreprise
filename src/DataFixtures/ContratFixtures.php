@@ -31,7 +31,7 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
     {
         $now = new DateTime();
 
-        $prefixContrat = ContratTypeFixtures::PREFIX; 
+        $prefixContrat = ContratTypeFixtures::PREFIX;
         $contratTypes = [];
 
         $prefixClient = ClientFixtures::PREFIX;
@@ -68,7 +68,7 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
             $clientType = $this->getReference($clientTypes[array_rand($clientTypes, 1)]);
             //Pick a random factureType reference;
             $factureType = $this->getReference($factureTypes[array_rand($factureTypes, 1)]);
-            
+
 
 
 
