@@ -19,6 +19,10 @@ class ContratTypeFixtures extends Fixture
 
     private Generator $faker;
 
+    public function __construct()
+    {
+        $this->faker = Factory::create('fr_FR');
+    }
     public function load(ObjectManager $manager): void
     {
 
