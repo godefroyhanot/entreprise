@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\FacturationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Client;
 
 #[ORM\Entity(repositoryClass: FacturationRepository::class)]
 class Facturation
@@ -16,8 +17,11 @@ class Facturation
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $client = null;
+    /**
+     * @ORM\ManyToOne(targetEntity=Client::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Client $client = null;
 
     #[ORM\Column(length: 255)]
     private ?string $contrat = null;
@@ -48,12 +52,12 @@ class Facturation
         return $this;
     }
 
-    public function getClient(): ?string
+    public function getClient(): ?Client
     {
         return $this->client;
     }
 
-    public function setClient(string $client): static
+    public function setClient(?Client $client): static
     {
         $this->client = $client;
 
