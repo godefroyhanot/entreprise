@@ -26,9 +26,10 @@ class FacturationFixtures extends Fixture
 
         for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
             $facturation = new Facturation();
+
             $facturation
                 ->setNumber($faker->unique()->numerify('Facture ###'))
-                ->setClient($faker->name)
+                ->setClient($clients[array_rand($clients, 1)])
                 ->setContrat($faker->company)
                 ->setCreatedAt($faker->dateTimeThisYear)
                 ->setUpdateAt($faker->dateTimeThisYear)
@@ -43,4 +44,4 @@ class FacturationFixtures extends Fixture
 
         $manager->flush();
     }
-}  
+}
