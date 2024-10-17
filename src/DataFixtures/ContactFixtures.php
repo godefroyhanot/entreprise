@@ -17,7 +17,7 @@ class ContactFixtures extends Fixture
                 ->setName("Contact #" . $i) 
                 ->setCreatedAt(new \DateTime()) 
                 ->setUpdatedAt(new \DateTime()) 
-                ->setStatus($i % 2 == 0 ? 'active' : 'inactive'); 
+                ->setStatus($i % 2 == 0 ? 'on' : 'off');
             
             $manager->persist($contact); 
         }
