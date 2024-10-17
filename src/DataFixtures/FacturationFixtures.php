@@ -26,7 +26,7 @@ class FacturationFixtures extends Fixture
                 ->setContrat("Contrat #" . $i)
                 ->setCreatedAt($now)
                 ->setUpdateAt($now)
-                ->setStatus(1);
+                ->setStatus('on');
 
             $manager->persist($facturation);
             $this->addReference(self::PREFIX . $i, $facturation);
