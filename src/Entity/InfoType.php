@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\InfoTypeRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: InfoTypeRepository::class)]
 class InfoType
@@ -24,10 +26,18 @@ class InfoType
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $updateAt = null;
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
+
+    #[ORM\OneToMany(mappedBy: 'type', targetEntity: Info::class)]
+    private Collection $infos;
+
+    public function __construct()
+    {
+        $this->infos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -70,14 +80,14 @@ class InfoType
         return $this;
     }
 
-    public function getUpdateAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->updateAt;
+        return $this->updatedAt;
     }
 
-    public function setUpdateAt(\DateTimeInterface $updateAt): static
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
     {
-        $this->updateAt = $updateAt;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -90,6 +100,36 @@ class InfoType
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Info>
+     */
+    public function getInfos(): Collection
+    {
+        return $this->infos;
+    }
+
+    public function addInfo(Info $info): static
+    {
+        if (!$this->infos->contains($info)) {
+            $this->infos[] = $info;
+            $info->setType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInfo(Info $info): static
+    {
+        if ($this->infos->removeElement($info)) {
+            // set the owning side to null (unless already changed)
+            if ($info->getType() === $this) {
+                $info->setType(null);
+            }
+        }
 
         return $this;
     }

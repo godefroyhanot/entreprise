@@ -17,9 +17,9 @@ class Info
     #[ORM\Column]
     private ?bool $isAnonymous = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: InfoType::class, inversedBy: 'infos')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Infotype $type = null;
+    private ?InfoType $type = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $info = null;
@@ -27,8 +27,8 @@ class Info
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updateAt = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
@@ -50,12 +50,12 @@ class Info
         return $this;
     }
 
-    public function getType(): ?Infotype
+    public function getType(): ?InfoType
     {
         return $this->type;
     }
 
-    public function setType(?Infotype $type): static
+    public function setType(?InfoType $type): static
     {
         $this->type = $type;
 
@@ -86,14 +86,14 @@ class Info
         return $this;
     }
 
-    public function getUpdateAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->updateAt;
+        return $this->updatedAt;
     }
 
-    public function setUpdateAt(\DateTimeImmutable $updateAt): static
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
     {
-        $this->updateAt = $updateAt;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
