@@ -31,11 +31,16 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
     {
         $now = new DateTime();
 
-        $prefixContrat = ContratTypeFixtures::PREFIX;
+        $prefixContrat = ContratTypeFixtures::PREFIX; 
         $contratTypes = [];
 
         $prefixClient = ClientFixtures::PREFIX;
         $clientTypes = [];
+
+        $prefixFacture = FacturationFixtures::PREFIX;
+        $factureTypes = [];
+
+
         $isDone = false;
 
         for ($i = ContratTypeFixtures::POOL_MIN; $i < ContratTypeFixtures::POOL_MAX; $i++) {
@@ -45,6 +50,10 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
         for ($i = ClientFixtures::POOL_MIN; $i < ClientFixtures::POOL_MAX; $i++) {
             //Add prefix to contratTypes Array 
             $clientTypes[] = $prefixClient . $i;
+        }
+        for ($i = FacturationFixtures::POOL_MIN; $i < FacturationFixtures::POOL_MAX; $i++) {
+            //Add prefix to factureTypes Array 
+            $factureTypes[] = $prefixFacture . $i;
         }
 
         $contrats = [];
@@ -57,17 +66,16 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
             $contratType = $this->getReference($contratTypes[array_rand($contratTypes, 1)]);
             //Pick a random clientType reference;
             $clientType = $this->getReference($clientTypes[array_rand($clientTypes, 1)]);
+            //Pick a random factureType reference;
+            $factureType = $this->getReference($factureTypes[array_rand($factureTypes, 1)]);
+            
+
+
 
             $dateCreated = $this->faker->dateTimeInInterval('-1 week', '+1 week');
             $dateStarted = $this->faker->dateTimeInInterval('-1 year', '+1 year');
             $dateUpdated = $this->faker->dateTimeBetween($dateCreated, $now);
             $dateEnd = $this->faker->dateTimeBetween($dateStarted, $now);
-
-            $dateCreated = $this->faker->dateTimeInInterval('-1 week', '+1 week');
-            $dateStarted = $this->faker->dateTimeInInterval('-1 year', '+1 year');
-            $dateUpdated = $this->faker->dateTimeBetween($dateCreated, $now);
-            $dateEnd = $this->faker->dateTimeBetween($dateStarted, $now);
-
             $contrat = new Contrat();
             $contrat
                 ->setName($this->faker->sentence(3))
@@ -78,6 +86,7 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
                 ->setEndAt($dateEnd)
                 ->setType($contratType)
                 ->setClient($clientType)
+                ->addFacture($factureType)
                 ->setStatus("on")
             ;
             $manager->persist($contrat);
