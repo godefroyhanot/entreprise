@@ -68,6 +68,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.6",
+        "fakerphp/faker": "^1.23",
         "symfony/maker-bundle": "^1.61"
     }
 }
