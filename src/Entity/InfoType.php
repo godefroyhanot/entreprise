@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\InfoTypeRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ClientRepository;
 
-#[ORM\Entity(repositoryClass: ClientRepository::class)]
-class Client
+#[ORM\Entity(repositoryClass: InfoTypeRepository::class)]
+class InfoType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,6 +19,8 @@ class Client
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $info = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -26,19 +28,17 @@ class Client
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(length: 25)]
+    #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    /**
-     * @var Collection<int, Contrat>
-     */
-    #[ORM\OneToMany(targetEntity: Contrat::class, mappedBy: 'client')]
-    private Collection $contrats;
+    #[ORM\OneToMany(mappedBy: 'type', targetEntity: Info::class)]
+    private Collection $infos;
 
     public function __construct()
     {
-        $this->contrats = new ArrayCollection();
+        $this->infos = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +52,18 @@ class Client
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getInfo(): ?string
+    {
+        return $this->info;
+    }
+
+    public function setInfo(string $info): static
+    {
+        $this->info = $info;
 
         return $this;
     }
@@ -80,8 +92,6 @@ class Client
         return $this;
     }
 
-
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -95,29 +105,29 @@ class Client
     }
 
     /**
-     * @return Collection<int, Contrat>
+     * @return Collection<int, Info>
      */
-    public function getContrats(): Collection
+    public function getInfos(): Collection
     {
-        return $this->contrats;
+        return $this->infos;
     }
 
-    public function addContrat(Contrat $contrat): static
+    public function addInfo(Info $info): static
     {
-        if (!$this->contrats->contains($contrat)) {
-            $this->contrats->add($contrat);
-            $contrat->setClient($this);
+        if (!$this->infos->contains($info)) {
+            $this->infos[] = $info;
+            $info->setType($this);
         }
 
         return $this;
     }
 
-    public function removeContrat(Contrat $contrat): static
+    public function removeInfo(Info $info): static
     {
-        if ($this->contrats->removeElement($contrat)) {
+        if ($this->infos->removeElement($info)) {
             // set the owning side to null (unless already changed)
-            if ($contrat->getClient() === $this) {
-                $contrat->setClient(null);
+            if ($info->getType() === $this) {
+                $info->setType(null);
             }
         }
 

@@ -31,6 +31,7 @@ class FacturationFixtures extends Fixture
                 ->setUpdateAt($faker->dateTimeThisYear)
                 ->setStatus($faker->randomElement([0, 1]));
 
+
             $manager->persist($facturation);
             $this->addReference(self::PREFIX . $i, $facturation);
 

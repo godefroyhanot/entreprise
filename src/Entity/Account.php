@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ClientRepository;
+use App\Repository\AccountRepository;
 
-#[ORM\Entity(repositoryClass: ClientRepository::class)]
-class Client
+#[ORM\Entity(repositoryClass: AccountRepository::class)]
+class Account
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,6 +17,11 @@ class Client
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $url = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -28,17 +31,6 @@ class Client
 
     #[ORM\Column(length: 25)]
     private ?string $status = null;
-
-    /**
-     * @var Collection<int, Contrat>
-     */
-    #[ORM\OneToMany(targetEntity: Contrat::class, mappedBy: 'client')]
-    private Collection $contrats;
-
-    public function __construct()
-    {
-        $this->contrats = new ArrayCollection();
-    }
     public function getId(): ?int
     {
         return $this->id;
@@ -56,6 +48,29 @@ class Client
         return $this;
     }
 
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): static
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -90,36 +105,6 @@ class Client
     public function setStatus(string $status): static
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Contrat>
-     */
-    public function getContrats(): Collection
-    {
-        return $this->contrats;
-    }
-
-    public function addContrat(Contrat $contrat): static
-    {
-        if (!$this->contrats->contains($contrat)) {
-            $this->contrats->add($contrat);
-            $contrat->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeContrat(Contrat $contrat): static
-    {
-        if ($this->contrats->removeElement($contrat)) {
-            // set the owning side to null (unless already changed)
-            if ($contrat->getClient() === $this) {
-                $contrat->setClient(null);
-            }
-        }
 
         return $this;
     }

@@ -6,7 +6,7 @@ use App\Repository\ContratRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ContratsRepository::class)]
+#[ORM\Entity(repositoryClass: ContratRepository::class)]
 class Contrat
 {
     #[ORM\Id]
@@ -23,9 +23,6 @@ class Contrat
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $endAt = null;
 
-
-
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -38,6 +35,13 @@ class Contrat
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?ContratType $type = null;
+    
+    #[ORM\Column]
+    private ?bool $isDone = null;
+
+    #[ORM\ManyToOne(inversedBy: 'contrats')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
 
     public function getId(): ?int
     {
@@ -130,4 +134,29 @@ class Contrat
 
         return $this;
     }
+
+    public function isDone(): ?bool
+    {
+        return $this->isDone;
+    }
+
+    public function setDone(bool $isDone): static
+    {
+        $this->isDone = $isDone;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+    
 }
