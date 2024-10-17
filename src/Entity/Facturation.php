@@ -14,7 +14,7 @@ class Facturation
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $number = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $client = null;
@@ -23,10 +23,10 @@ class Facturation
     private ?string $contrat = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTime $createdAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updateAt = null;
+    private ?\DateTime $updateAt = null;
 
     #[ORM\Column]
     private ?int $status = null;
@@ -38,12 +38,12 @@ class Facturation
 
     public function getNumber(): ?string
     {
-        return $this->number;
+        return $this->name;
     }
 
-    public function setNumber(string $number): static
+    public function setNumber(string $name): static
     {
-        $this->number = $number;
+        $this->name = $name;
 
         return $this;
     }
@@ -72,24 +72,24 @@ class Facturation
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdateAt(): ?\DateTimeImmutable
+    public function getUpdateAt(): ?\DateTime
     {
         return $this->updateAt;
     }
 
-    public function setUpdateAt(\DateTimeImmutable $updateAt): static
+    public function setUpdateAt(\DateTime $updateAt): static
     {
         $this->updateAt = $updateAt;
 
