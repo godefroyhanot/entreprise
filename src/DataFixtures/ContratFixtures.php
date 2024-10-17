@@ -16,11 +16,20 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $now = new DateTime();
-        $contratTypePool = $this->getReference(ContratTypeFixtures::CONTRAT_TYPE_POOL);
+
+
+        $prefix = ContratTypeFixtures::CONTRAT_TYPE_POOL;
+        $contratTypes = [];
+        for ($i = ContratTypeFixtures::CONTRAT_TYPE_POOL_MIN; $i < ContratTypeFixtures::CONTRAT_TYPE_POOL_MAX; $i++) {
+            $contratTypes[] = $prefix . $i;
+        }
+
 
 
         $contrats = [];
         for ($i = 0; $i < 50; $i++) {
+            $contratTypePool = $this->getReference($contratTypes[array_rand($contratTypes, 1)]);
+
             $contrat = new Contrat();
             $contrat
                 ->setName("contrat #" . $i)
