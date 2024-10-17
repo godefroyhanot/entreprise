@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\Client;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Faker\Factory; 
 
 class ClientFixtures extends Fixture
 {
@@ -15,21 +16,17 @@ class ClientFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $now = new DateTime();
-        $clients = [];
+        $faker = Factory::create(); 
 
         for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
             $client = new Client();
             $client
-                ->setName("Client #" . $i)
-                ->setCreatedAt($now)
-                ->setUpdatedAt($now)
-                ->setStatus("active"); // ou autre statut selon ce que tu veux tester
-
+                ->setName($faker->company)
+                ->setCreatedAt($faker->dateTimeThisYear())
+                ->setUpdatedAt($faker->dateTimeThisYear()) 
+                ->setStatus($faker->randomElement(['active', 'inactive', 'pending'])); 
             $manager->persist($client);
-            $this->addReference(self::PREFIX . $i, $client);
-
-            $clients[] = $client;
+            $this->addReference(self::PREFIX . $i, $client); 
         }
 
         $manager->flush();
