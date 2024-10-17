@@ -24,7 +24,7 @@ class ClientFixtures extends Fixture
                 ->setName("Client #" . $i)
                 ->setCreatedAt($now)
                 ->setUpdatedAt($now)
-                ->setStatus("active"); // ou autre statut selon ce que tu veux tester
+                ->setStatus("on"); // ou autre statut selon ce que tu veux tester
 
             $manager->persist($client);
             $this->addReference(self::PREFIX . $i, $client);
