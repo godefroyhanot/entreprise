@@ -17,14 +17,11 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
     {
         $now = new DateTime();
 
-
         $prefix = ContratTypeFixtures::CONTRAT_TYPE_POOL;
         $contratTypes = [];
         for ($i = ContratTypeFixtures::CONTRAT_TYPE_POOL_MIN; $i < ContratTypeFixtures::CONTRAT_TYPE_POOL_MAX; $i++) {
             $contratTypes[] = $prefix . $i;
         }
-
-
 
         $contrats = [];
         for ($i = 0; $i < 50; $i++) {
@@ -43,9 +40,6 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($contrat);
             $contrats[] = $contrat;
         }
-
-        //Contrat Type > Contrats
-
 
         $manager->flush();
     }
