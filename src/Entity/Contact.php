@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\ContactRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ClientRepository;
 
-#[ORM\Entity(repositoryClass: ClientRepository::class)]
-class Client
+#[ORM\Entity(repositoryClass: ContactRepository::class)]
+class Contact
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,7 +16,6 @@ class Client
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
-
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -29,16 +26,6 @@ class Client
     #[ORM\Column(length: 25)]
     private ?string $status = null;
 
-    /**
-     * @var Collection<int, Contrat>
-     */
-    #[ORM\OneToMany(targetEntity: Contrat::class, mappedBy: 'client')]
-    private Collection $contrats;
-
-    public function __construct()
-    {
-        $this->contrats = new ArrayCollection();
-    }
     public function getId(): ?int
     {
         return $this->id;
@@ -80,8 +67,6 @@ class Client
         return $this;
     }
 
-
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -90,36 +75,6 @@ class Client
     public function setStatus(string $status): static
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Contrat>
-     */
-    public function getContrats(): Collection
-    {
-        return $this->contrats;
-    }
-
-    public function addContrat(Contrat $contrat): static
-    {
-        if (!$this->contrats->contains($contrat)) {
-            $this->contrats->add($contrat);
-            $contrat->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeContrat(Contrat $contrat): static
-    {
-        if ($this->contrats->removeElement($contrat)) {
-            // set the owning side to null (unless already changed)
-            if ($contrat->getClient() === $this) {
-                $contrat->setClient(null);
-            }
-        }
 
         return $this;
     }

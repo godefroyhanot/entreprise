@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\ContratRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ContratsRepository::class)]
+#[ORM\Entity(repositoryClass: ContratRepository::class)]
 class Contrat
 {
     #[ORM\Id]
@@ -23,9 +25,6 @@ class Contrat
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $endAt = null;
 
-
-
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -38,6 +37,24 @@ class Contrat
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?ContratType $type = null;
+    
+    #[ORM\Column]
+    private ?bool $isDone = null;
+
+    #[ORM\ManyToOne(inversedBy: 'contrats')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
+
+    /**
+     * @var Collection<int, Facturation>
+     */
+    #[ORM\ManyToMany(targetEntity: Facturation::class, inversedBy: 'contrats')]
+    private Collection $facture;
+
+    public function __construct()
+    {
+        $this->facture = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -130,4 +147,53 @@ class Contrat
 
         return $this;
     }
+
+    public function isDone(): ?bool
+    {
+        return $this->isDone;
+    }
+
+    public function setDone(bool $isDone): static
+    {
+        $this->isDone = $isDone;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Facturation>
+     */
+    public function getFacture(): Collection
+    {
+        return $this->facture;
+    }
+
+    public function addFacture(Facturation $facture): static
+    {
+        if (!$this->facture->contains($facture)) {
+            $this->facture->add($facture);
+        }
+
+        return $this;
+    }
+
+    public function removeFacture(Facturation $facture): static
+    {
+        $this->facture->removeElement($facture);
+
+        return $this;
+    }
+    
 }

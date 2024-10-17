@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FacturationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client;
 
@@ -32,8 +34,19 @@ class Facturation
     #[ORM\Column]
     private ?\DateTime $updateAt = null;
 
-    #[ORM\Column]
-    private ?int $status = null;
+    #[ORM\Column(length: 25)]
+    private ?string $status = null;
+
+    /**
+     * @var Collection<int, Contrat>
+     */
+    #[ORM\ManyToMany(targetEntity: Contrat::class, mappedBy: 'facture')]
+    private Collection $contrats;
+
+    public function __construct()
+    {
+        $this->contrats = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -100,14 +113,41 @@ class Facturation
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): static
+    public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Contrat>
+     */
+    public function getContrats(): Collection
+    {
+        return $this->contrats;
+    }
+
+    public function addContrat(Contrat $contrat): static
+    {
+        if (!$this->contrats->contains($contrat)) {
+            $this->contrats->add($contrat);
+            $contrat->addFacture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContrat(Contrat $contrat): static
+    {
+        if ($this->contrats->removeElement($contrat)) {
+            $contrat->removeFacture($this);
+        }
 
         return $this;
     }
