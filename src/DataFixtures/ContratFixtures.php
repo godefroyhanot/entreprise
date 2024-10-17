@@ -76,9 +76,6 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
             $dateStarted = $this->faker->dateTimeInInterval('-1 year', '+1 year');
             $dateUpdated = $this->faker->dateTimeBetween($dateCreated, $now);
             $dateEnd = $this->faker->dateTimeBetween($dateStarted, $now);
-
-
-            
             $contrat = new Contrat();
             $contrat
                 ->setName($this->faker->sentence(3))
