@@ -28,8 +28,8 @@ class Facturation
     #[ORM\Column]
     private ?\DateTime $updateAt = null;
 
-    #[ORM\Column]
-    private ?int $status = null;
+    #[ORM\Column(length: 25)]
+    private ?string $status = null;
 
     public function getId(): ?int
     {
@@ -96,12 +96,12 @@ class Facturation
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): static
+    public function setStatus(string $status): static
     {
         $this->status = $status;
 

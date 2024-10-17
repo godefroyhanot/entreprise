@@ -26,10 +26,10 @@ class ClientFixtures extends Fixture
         for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
             $client = new Client();
             $client
-                ->setName($this->faker->company) 
-                ->setCreatedAt($this->faker->dateTimeThisYear())
-                ->setUpdatedAt($this->faker->dateTimeThisYear())
-                ->setStatus($this->faker->randomElement(['active', 'inactive', 'pending']));
+                ->setName("Client #" . $i)
+                ->setCreatedAt($now)
+                ->setUpdatedAt($now)
+                ->setStatus("active"); // ou autre statut selon ce que tu veux tester
 
             $manager->persist($client);
             $this->addReference(self::PREFIX . $i, $client); 
