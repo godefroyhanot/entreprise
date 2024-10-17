@@ -2,27 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\InfoRepository;
+use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: InfoRepository::class)]
-class Info
+#[ORM\Entity(repositoryClass: ProductRepository::class)]
+class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column]
-    private ?bool $isAnonymous = null;
-
-    #[ORM\ManyToOne(targetEntity: InfoType::class, inversedBy: 'infos')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?InfoType $type = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $info = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -36,42 +26,6 @@ class Info
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function isAnonymous(): ?bool
-    {
-        return $this->isAnonymous;
-    }
-
-    public function setAnonymous(bool $isAnonymous): static
-    {
-        $this->isAnonymous = $isAnonymous;
-
-        return $this;
-    }
-
-    public function getType(): ?InfoType
-    {
-        return $this->type;
-    }
-
-    public function setType(?InfoType $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getInfo(): ?string
-    {
-        return $this->info;
-    }
-
-    public function setInfo(string $info): static
-    {
-        $this->info = $info;
-
-        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
