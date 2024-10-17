@@ -14,11 +14,8 @@ class Contact
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $links = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $name = null;
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -26,32 +23,20 @@ class Contact
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $status = null;
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLinks(): ?\DateTimeInterface
-    {
-        return $this->links;
-    }
-
-    public function setLinks(\DateTimeInterface $links): static
-    {
-        $this->links = $links;
-
-        return $this;
-    }
-
-    public function getName(): ?\DateTimeInterface
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(\DateTimeInterface $name): static
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -82,12 +67,12 @@ class Contact
         return $this;
     }
 
-    public function getStatus(): ?\DateTimeInterface
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(\DateTimeInterface $status): static
+    public function setStatus(string $status): static
     {
         $this->status = $status;
 
