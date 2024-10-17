@@ -16,17 +16,17 @@ class AppFixtures extends Fixture
         $now = new DateTime();
 
         //Clients > Contrats
-
-        for ($i = 0; $i < 15; $i++) {
-            $client = new Client();
-            $client
-                ->setName("client #" . $i)
-                ->setCreatedAt($now)
-                ->setUpdatedAt($now)
-                ->setStatus("on")
-            ;
-            $manager->persist($client);
-        }
+        /* Todo : Retirer ce bout de code et l'implementer dans un fixture adéquat*/
+        // for ($i = 0; $i < 15; $i++) {
+        //     $client = new Client();
+        //     $client
+        //         ->setName("client #" . $i)
+        //         ->setCreatedAt($now)
+        //         ->setUpdatedAt($now)
+        //         ->setStatus("on")
+        //     ;
+        //     $manager->persist($client);
+        // }
 
         $manager->flush();
     }

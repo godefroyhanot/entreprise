@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ContratRepository;
-use Doctrine\DBAL\Types\Types;
+use App\Repository\InfoTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 
-#[ORM\Entity(repositoryClass: ContratRepository::class)]
-class Contrat
+#[ORM\Entity(repositoryClass: InfoTypeRepository::class)]
+class InfoType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,11 +19,8 @@ class Contrat
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $startAt = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $endAt = null;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $info = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -29,15 +28,16 @@ class Contrat
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(length: 25)]
+    #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?ContratType $type = null;
-    
-    #[ORM\Column]
-    private ?bool $isDone = null;
+    #[ORM\OneToMany(mappedBy: 'type', targetEntity: Info::class)]
+    private Collection $infos;
+
+    public function __construct()
+    {
+        $this->infos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -46,7 +46,6 @@ class Contrat
 
     public function getName(): ?string
     {
-
         return $this->name;
     }
 
@@ -56,31 +55,19 @@ class Contrat
 
         return $this;
     }
-    public function getStartAt(): ?\DateTimeInterface
+
+    public function getInfo(): ?string
     {
-        return $this->startAt;
+        return $this->info;
     }
 
-    public function setStartAt(\DateTimeInterface $startAt): static
+    public function setInfo(string $info): static
     {
-        $this->startAt = $startAt;
+        $this->info = $info;
 
         return $this;
     }
 
-    public function getEndAt(): ?\DateTimeInterface
-    {
-        return $this->endAt;
-    }
-
-    public function setEndAt(\DateTimeInterface $endAt): static
-    {
-        $this->endAt = $endAt;
-
-        return $this;
-    }
-
-    
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -105,8 +92,6 @@ class Contrat
         return $this;
     }
 
-
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -119,26 +104,32 @@ class Contrat
         return $this;
     }
 
-    public function getType(): ?ContratType
+    /**
+     * @return Collection<int, Info>
+     */
+    public function getInfos(): Collection
     {
-        return $this->type;
+        return $this->infos;
     }
 
-    public function setType(?ContratType $type): static
+    public function addInfo(Info $info): static
     {
-        $this->type = $type;
+        if (!$this->infos->contains($info)) {
+            $this->infos[] = $info;
+            $info->setType($this);
+        }
 
         return $this;
     }
 
-    public function isDone(): ?bool
+    public function removeInfo(Info $info): static
     {
-        return $this->isDone;
-    }
-
-    public function setDone(bool $isDone): static
-    {
-        $this->isDone = $isDone;
+        if ($this->infos->removeElement($info)) {
+            // set the owning side to null (unless already changed)
+            if ($info->getType() === $this) {
+                $info->setType(null);
+            }
+        }
 
         return $this;
     }

@@ -11,14 +11,16 @@ class ContratTypeFixtures extends Fixture
 {
 
 
-    public const CONTRAT_TYPE_POOL = 'contrat-type';
+    public const PREFIX = "contratType#";
+    public const POOL_MAX = 5;
+    public const POOL_MIN = 0;
     public function load(ObjectManager $manager): void
     {
 
 
         $now = new DateTime();
         $contratTypes = [];
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
             $contratType = new ContratType();
             $contratType
                 ->setName("contrat Type #" . $i)
@@ -27,11 +29,13 @@ class ContratTypeFixtures extends Fixture
                 ->setStatus("on")
             ;
             $manager->persist($contratType);
+            $this->addReference(self::PREFIX . $i, $contratType);
+
             $contratTypes[] = $contratType;
         }
 
 
+
         $manager->flush();
-        $this->addReference(self::CONTRAT_TYPE_POOL, $contratType);
     }
 }
