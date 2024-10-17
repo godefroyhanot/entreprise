@@ -19,7 +19,6 @@ class Client
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -39,6 +38,7 @@ class Client
     {
         $this->contrats = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,8 +79,6 @@ class Client
 
         return $this;
     }
-
-
 
     public function getStatus(): ?string
     {

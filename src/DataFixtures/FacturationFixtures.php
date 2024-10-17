@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use Faker\Factory;
 use DateTime;
 use App\Entity\Facturation;
+use App\Entity\Client;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -20,6 +21,8 @@ class FacturationFixtures extends Fixture
         $faker = Factory::create('fr_FR');
 
         $facturations = [];
+
+        $clients = $manager->getRepository(Client::class)->findAll();
 
         for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
             $facturation = new Facturation();
@@ -40,4 +43,4 @@ class FacturationFixtures extends Fixture
 
         $manager->flush();
     }
-}
+}  
