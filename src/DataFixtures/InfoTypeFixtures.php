@@ -25,7 +25,7 @@ class InfoTypeFixtures extends Fixture
         for ($i = 0; $i < self::POOL_MAX; $i++) {
             $infoType = new InfoType();
             $infoType->setName('Type ' . $i)
-                     ->setInfo($this->faker->sentence(10)) // Utilisation de Faker via $this->faker
+                     ->setInfo($this->faker->sentence(10)) // Utilition de Faker via $this->faker
                      ->setCreatedAt($this->faker->dateTimeThisYear()) 
                      ->setUpdatedAt($this->faker->dateTimeThisYear()) 
                      ->setStatus($this->faker->randomElement(['active', 'inactive', 'pending'])); 
