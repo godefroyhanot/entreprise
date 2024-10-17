@@ -10,21 +10,18 @@ class ContactFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        
-        $contactsData = [];
 
-        foreach ($contactsData as $data) {
+        for ($i = 1; $i <= 10; $i++) { 
             $contact = new Contact();
             $contact
-                ->setName($data[0])
-                ->setCreatedAt(new \DateTime())
-                ->setUpdatedAt(new \DateTime())
-                ->setStatus($data[1]);
+                ->setName("Contact #" . $i) 
+                ->setCreatedAt(new \DateTime()) 
+                ->setUpdatedAt(new \DateTime()) 
+                ->setStatus($i % 2 == 0 ? 'active' : 'inactive'); 
             
-            
-            $manager->persist($contact);
+            $manager->persist($contact); 
         }
 
-        $manager->flush();
+        $manager->flush(); 
     }
 }
