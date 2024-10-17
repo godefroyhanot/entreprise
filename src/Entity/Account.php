@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\ContratRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AccountRepository;
 
-#[ORM\Entity(repositoryClass: ContratRepository::class)]
-class Contrat
+#[ORM\Entity(repositoryClass: AccountRepository::class)]
+class Account
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,11 +17,11 @@ class Contrat
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $startAt = null;
+    #[ORM\Column(length: 255)]
+    private ?string $url = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $endAt = null;
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -31,14 +31,6 @@ class Contrat
 
     #[ORM\Column(length: 25)]
     private ?string $status = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?ContratType $type = null;
-    
-    #[ORM\Column]
-    private ?bool $isDone = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -46,7 +38,6 @@ class Contrat
 
     public function getName(): ?string
     {
-
         return $this->name;
     }
 
@@ -56,31 +47,30 @@ class Contrat
 
         return $this;
     }
-    public function getStartAt(): ?\DateTimeInterface
+
+    public function getUrl(): ?string
     {
-        return $this->startAt;
+        return $this->url;
     }
 
-    public function setStartAt(\DateTimeInterface $startAt): static
+    public function setUrl(string $url): static
     {
-        $this->startAt = $startAt;
+        $this->url = $url;
 
         return $this;
     }
 
-    public function getEndAt(): ?\DateTimeInterface
+    public function getPassword(): ?string
     {
-        return $this->endAt;
+        return $this->password;
     }
 
-    public function setEndAt(\DateTimeInterface $endAt): static
+    public function setPassword(string $password): static
     {
-        $this->endAt = $endAt;
+        $this->password = $password;
 
         return $this;
     }
-
-    
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -115,30 +105,6 @@ class Contrat
     public function setStatus(string $status): static
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getType(): ?ContratType
-    {
-        return $this->type;
-    }
-
-    public function setType(?ContratType $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function isDone(): ?bool
-    {
-        return $this->isDone;
-    }
-
-    public function setDone(bool $isDone): static
-    {
-        $this->isDone = $isDone;
 
         return $this;
     }

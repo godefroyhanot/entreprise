@@ -22,6 +22,8 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
 
         $prefix = ContratTypeFixtures::PREFIX;
         $contratTypes = [];
+        $isDone = false;
+
         for ($i = ContratTypeFixtures::POOL_MIN; $i < ContratTypeFixtures::POOL_MAX; $i++) {
             //Add prefix to contratTypes Array 
             $contratTypes[] = $prefix . $i;
@@ -39,6 +41,7 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
             $contrat = new Contrat();
             $contrat
                 ->setName("contrat #" . $i)
+                ->setDone($isDone)
                 ->setCreatedAt($now)
                 ->setUpdatedAt($now)
                 ->setStartAt($now)
