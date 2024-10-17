@@ -19,13 +19,13 @@ class InfoTypeFixtures extends Fixture
         for ($i = 0; $i < self::POOL_MAX; $i++) {
             $infoType = new InfoType();
             $infoType->setName('Type ' . $i)
-                     ->setInfo($faker->sentence(10)) // Générer une description courte
-                     ->setCreatedAt($faker->dateTimeThisYear()) // Date aléatoire cette année
-                     ->setUpdatedAt($faker->dateTimeThisYear()) // Date de mise à jour aléatoire
-                     ->setStatus($faker->randomElement(['active', 'inactive', 'pending'])); // Statut aléatoire
+                     ->setInfo($faker->sentence(10)) 
+                     ->setCreatedAt($faker->dateTimeThisYear()) 
+                     ->setUpdatedAt($faker->dateTimeThisYear()) 
+                     ->setStatus($faker->randomElement(['active', 'inactive', 'pending'])); 
 
             $manager->persist($infoType);
-            $this->addReference(self::PREFIX . $i, $infoType); // Ajouter une référence pour utilisation dans d'autres fixtures
+            $this->addReference(self::PREFIX . $i, $infoType); 
         }
 
         $manager->flush();

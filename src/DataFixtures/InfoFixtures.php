@@ -6,28 +6,33 @@ use App\Entity\Info;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Faker\Generator;
 
 class InfoFixtures extends Fixture
 {
     public const PREFIX = 'info#';
     public const POOL_MAX = 10;
 
+    private Generator $faker;
+
+    public function __construct()
+    {
+        $this->faker = Factory::create(); // Initialisation de Faker dans le constructeur
+    }
+
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create();
-
-        // Générer des infos et les associer à un InfoType existant
         for ($i = 0; $i < self::POOL_MAX; $i++) {
             $info = new Info();
-            $info->setAnonymous($faker->boolean())
-                 ->setType($this->getReference('infotype#' . $faker->numberBetween(0, 4))) // Associer à un InfoType (référence à créer)
-                 ->setInfo($faker->text(200))
-                 ->setCreatedAt($faker->dateTimeThisYear())
-                 ->setUpdatedAt($faker->dateTimeThisYear())
-                 ->setStatus($faker->randomElement(['active', 'inactive', 'pending']));
+            $info->setAnonymous($this->faker->boolean())
+                 ->setType($this->getReference('infotype#' . $this->faker->numberBetween(0, 4))) // Associer à un InfoType
+                 ->setInfo($this->faker->text(200))
+                 ->setCreatedAt($this->faker->dateTimeThisYear())
+                 ->setUpdatedAt($this->faker->dateTimeThisYear())
+                 ->setStatus($this->faker->randomElement(['active', 'inactive', 'pending']));
 
             $manager->persist($info);
-            $this->addReference(self::PREFIX . $i, $info); // Ajouter une référence pour réutilisation
+            $this->addReference(self::PREFIX . $i, $info); // Ajouter une référence
         }
 
         $manager->flush();
@@ -36,7 +41,7 @@ class InfoFixtures extends Fixture
     public function getDependencies()
     {
         return [
-            InfoTypeFixtures::class, // Assure que InfoType est chargé avant
+            InfoTypeFixtures::class, // Dépendance à InfoTypeFixtures
         ];
     }
 }

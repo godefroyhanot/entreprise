@@ -2,11 +2,11 @@
 
 namespace App\DataFixtures;
 
-use DateTime;
 use App\Entity\Client;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Faker\Factory; 
+use Faker\Factory;
+use Faker\Generator; // Import du type pour Faker
 
 class ClientFixtures extends Fixture
 {
@@ -14,17 +14,23 @@ class ClientFixtures extends Fixture
     public const POOL_MAX = 10;
     public const POOL_MIN = 0;
 
+    private Generator $faker; 
+
+    public function __construct()
+    {
+        $this->faker = Factory::create(); 
+    }
+
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create(); 
-
         for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
             $client = new Client();
             $client
-                ->setName($faker->company)
-                ->setCreatedAt($faker->dateTimeThisYear())
-                ->setUpdatedAt($faker->dateTimeThisYear()) 
-                ->setStatus($faker->randomElement(['active', 'inactive', 'pending'])); 
+                ->setName($this->faker->company) 
+                ->setCreatedAt($this->faker->dateTimeThisYear())
+                ->setUpdatedAt($this->faker->dateTimeThisYear())
+                ->setStatus($this->faker->randomElement(['active', 'inactive', 'pending']));
+
             $manager->persist($client);
             $this->addReference(self::PREFIX . $i, $client); 
         }
