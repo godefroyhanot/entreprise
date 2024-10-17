@@ -15,7 +15,7 @@ class ProductFixtures extends Fixture
 
         for ($i = 1; $i <= 10; $i++) {
             $product = new Product();
-            $product->setStatus($faker->randomElement(['draft', 'published']));
+            $product->setStatus('ON'); 
             $product->setCreatedAt($faker->dateTimeThisYear());
             $product->setUpdatedAt($faker->dateTimeThisMonth());
 
