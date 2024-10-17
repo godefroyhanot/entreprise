@@ -1,0 +1,2 @@
+Trello: https://trello.com/invite/b/6710d7c8a389152c902a0818/ATTI40af8b2dd474e2fcef5fb6acaabec82267A46265/entreprise
+UML: https://drive.google.com/file/d/1OsH2Q2LRJ3ZBNOC0QzHnBnKKqGFZf-bX/view?usp=sharing
