@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use DateTime;
 use App\Entity\Contrat;
 use App\Entity\ContratType;
+use App\Entity\Client;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use App\Repository\ContratTypeRepository;
@@ -30,13 +31,20 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
     {
         $now = new DateTime();
 
-        $prefix = ContratTypeFixtures::PREFIX;
+        $prefixContrat = ContratTypeFixtures::PREFIX;
         $contratTypes = [];
+
+        $prefixClient = ClientFixtures::PREFIX;
+        $clientTypes = [];
         $isDone = false;
 
         for ($i = ContratTypeFixtures::POOL_MIN; $i < ContratTypeFixtures::POOL_MAX; $i++) {
             //Add prefix to contratTypes Array 
-            $contratTypes[] = $prefix . $i;
+            $contratTypes[] = $prefixContrat . $i;
+        }
+        for ($i = ClientFixtures::POOL_MIN; $i < ClientFixtures::POOL_MAX; $i++) {
+            //Add prefix to contratTypes Array 
+            $clientTypes[] = $prefixClient . $i;
         }
 
         $contrats = [];
@@ -47,6 +55,13 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
 
             //Pick a random contratType reference;
             $contratType = $this->getReference($contratTypes[array_rand($contratTypes, 1)]);
+            //Pick a random clientType reference;
+            $clientType = $this->getReference($clientTypes[array_rand($clientTypes, 1)]);
+
+            $dateCreated = $this->faker->dateTimeInInterval('-1 week', '+1 week');
+            $dateStarted = $this->faker->dateTimeInInterval('-1 year', '+1 year');
+            $dateUpdated = $this->faker->dateTimeBetween($dateCreated, $now);
+            $dateEnd = $this->faker->dateTimeBetween($dateStarted, $now);
 
             $dateCreated = $this->faker->dateTimeInInterval('-1 week', '+1 week');
             $dateStarted = $this->faker->dateTimeInInterval('-1 year', '+1 year');
@@ -62,6 +77,7 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
                 ->setStartAt($dateStarted)
                 ->setEndAt($dateEnd)
                 ->setType($contratType)
+                ->setClient($clientType)
                 ->setStatus("on")
             ;
             $manager->persist($contrat);
