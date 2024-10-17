@@ -13,19 +13,28 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 class ContratFixtures extends Fixture implements DependentFixtureInterface
 {
 
+    public const PREFIX = "contrat#";
+    public const POOL_MIN = 0;
+    public const POOL_MAX = 50;
     public function load(ObjectManager $manager): void
     {
         $now = new DateTime();
 
-        $prefix = ContratTypeFixtures::CONTRAT_TYPE_POOL;
+        $prefix = ContratTypeFixtures::PREFIX;
         $contratTypes = [];
-        for ($i = ContratTypeFixtures::CONTRAT_TYPE_POOL_MIN; $i < ContratTypeFixtures::CONTRAT_TYPE_POOL_MAX; $i++) {
+        for ($i = ContratTypeFixtures::POOL_MIN; $i < ContratTypeFixtures::POOL_MAX; $i++) {
+            //Add prefix to contratTypes Array 
             $contratTypes[] = $prefix . $i;
         }
 
         $contrats = [];
-        for ($i = 0; $i < 50; $i++) {
-            $contratTypePool = $this->getReference($contratTypes[array_rand($contratTypes, 1)]);
+
+        for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
+
+
+
+            //Pick a random contratType reference;
+            $contratType = $this->getReference($contratTypes[array_rand($contratTypes, 1)]);
 
             $contrat = new Contrat();
             $contrat
@@ -34,10 +43,11 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
                 ->setUpdatedAt($now)
                 ->setStartAt($now)
                 ->setEndAt($now)
-                ->setType($contratTypePool)
+                ->setType($contratType)
                 ->setStatus("on")
             ;
             $manager->persist($contrat);
+            $this->addReference(self::PREFIX . $i, $contrat);
             $contrats[] = $contrat;
         }
 
