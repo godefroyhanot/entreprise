@@ -80,7 +80,6 @@ final class AccountApiController extends AbstractController
 
         $entityManager->persist($newAccount);
         $entityManager->flush();
-
         $jsonAccount = $serializer->serialize($newAccount, 'json', ['groups' => ['account']]);
 
         return new JsonResponse($jsonAccount, Response::HTTP_CREATED, [], true);
@@ -95,12 +94,12 @@ final class AccountApiController extends AbstractController
 
         $data = $request->toArray();
         $client = $clientRepository->find($data["client"]);
-
+        $createdAt = $account->getCreatedAt();
         /* Façon par Deserialisation */
         $updatedAccount = $serializer->deserialize($request->getContent(), Account::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $account]);
         $updatedAccount
             ->setClient($client)
-            ->setCreatedAt($now)
+            ->setCreatedAt($createdAt)
             ->setUpdatedAt($now)
             ->setStatus("on")
         ;
