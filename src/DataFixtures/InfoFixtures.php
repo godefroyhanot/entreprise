@@ -13,6 +13,7 @@ class InfoFixtures extends Fixture implements DependentFixtureInterface
 {
     public const PREFIX = 'info#';
     public const POOL_MAX = 10;
+    public const POOL_MIN = 0;
 
     private Generator $faker;
 
@@ -23,14 +24,14 @@ class InfoFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < self::POOL_MAX; $i++) {
+        for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
             $info = new Info();
             $info->setAnonymous($this->faker->boolean())
-                ->setType($this->getReference('infotype#' . $this->faker->numberBetween(0, 4))) // Associer à un InfoType
+                ->setType($this->getReference(InfoTypeFixtures::PREFIX . $this->faker->numberBetween(InfoTypeFixtures::POOL_MIN, InfoTypeFixtures::POOL_MIN))) // Associer à un InfoType
                 ->setInfo($this->faker->text(200))
                 ->setCreatedAt($this->faker->dateTimeThisYear())
                 ->setUpdatedAt($this->faker->dateTimeThisYear())
-                ->setStatus($this->faker->randomElement(['active', 'inactive', 'pending']));
+                ->setStatus($this->faker->randomElement(['on', 'off']));
 
             $manager->persist($info);
             $this->addReference(self::PREFIX . $i, $info); // Ajouter une référence
