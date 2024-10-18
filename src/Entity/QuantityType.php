@@ -2,20 +2,24 @@
 
 namespace App\Entity;
 
-use App\Repository\ContactLinkEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\QuantityTypeRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: ContactLinkEntityRepository::class)]
-class ContactLinkEntity
+#[ORM\Entity(repositoryClass: QuantityTypeRepository::class)]
+class QuantityType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['quantityType', 'product'])]
+
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $value = null;
+    #[ORM\Column(length: 16)]
+    #[Groups(['quantityType', 'product'])]
+    private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -31,14 +35,14 @@ class ContactLinkEntity
         return $this->id;
     }
 
-    public function getValue(): ?string
+    public function getName(): ?string
     {
-        return $this->value;
+        return $this->name;
     }
 
-    public function setValue(string $value): static
+    public function setName(string $name): static
     {
-        $this->value = $value;
+        $this->name = $name;
 
         return $this;
     }

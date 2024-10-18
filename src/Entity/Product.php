@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,27 @@ class Product
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
+
+
+    /**
+     * @var Collection<int, Contrat>
+     */
+    #[ORM\ManyToMany(targetEntity: Contrat::class, mappedBy: 'product')]
+    private Collection $contrats;
+
+
+    #[ORM\Column(nullable: true)]
+    private ?int $quantity = null;
+
+    #[ORM\ManyToOne]
+    private ?QuantityType $quantityType = null;
+
+
+    public function __construct()
+    {
+        $this->contrats = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -60,6 +83,60 @@ class Product
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+
+
+    /**
+     * @return Collection<int, Contrat>
+     */
+    public function getContrats(): Collection
+    {
+        return $this->contrats;
+    }
+
+    public function addContrat(Contrat $contrat): static
+    {
+        if (!$this->contrats->contains($contrat)) {
+            $this->contrats->add($contrat);
+            $contrat->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContrat(Contrat $contrat): static
+    {
+        if ($this->contrats->removeElement($contrat)) {
+            $contrat->removeProduct($this);
+        }
+
+        return $this;
+    }
+
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity): static
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getQuantityType(): ?QuantityType
+    {
+        return $this->quantityType;
+    }
+
+    public function setQuantityType(?QuantityType $quantityType): static
+    {
+        $this->quantityType = $quantityType;
 
         return $this;
     }
