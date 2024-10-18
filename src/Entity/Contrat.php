@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ContratRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,6 +40,28 @@ class Contrat
     
     #[ORM\Column]
     private ?bool $isDone = null;
+
+    #[ORM\ManyToOne(inversedBy: 'contrats')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
+
+    /**
+     * @var Collection<int, Facturation>
+     */
+    #[ORM\ManyToMany(targetEntity: Facturation::class, inversedBy: 'contrats')]
+    private Collection $facture;
+
+    /**
+     * @var Collection<int, Product>
+     */
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'contrats')]
+    private Collection $product;
+
+    public function __construct()
+    {
+        $this->facture = new ArrayCollection();
+        $this->product = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -142,4 +166,65 @@ class Contrat
 
         return $this;
     }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Facturation>
+     */
+    public function getFacture(): Collection
+    {
+        return $this->facture;
+    }
+
+    public function addFacture(Facturation $facture): static
+    {
+        if (!$this->facture->contains($facture)) {
+            $this->facture->add($facture);
+        }
+
+        return $this;
+    }
+
+    public function removeFacture(Facturation $facture): static
+    {
+        $this->facture->removeElement($facture);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProduct(): Collection
+    {
+        return $this->product;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->product->contains($product)) {
+            $this->product->add($product);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        $this->product->removeElement($product);
+
+        return $this;
+    }
+    
 }
