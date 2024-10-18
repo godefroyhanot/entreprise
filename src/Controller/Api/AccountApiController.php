@@ -18,7 +18,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route('/api/account')]
 final class AccountApiController extends AbstractController
 {
-
     #[Route(name: 'api_account_index', methods: ['GET'])]
     public function index(AccountRepository $accountRepository, SerializerInterface $serializer): JsonResponse
     {
