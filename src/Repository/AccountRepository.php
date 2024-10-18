@@ -31,6 +31,25 @@ class AccountRepository extends ServiceEntityRepository
     //        ;
     //    }
 
+
+    /**
+     * @return Account[] Returns an array of Account objects
+     */
+    public function findByStatus(): array
+    {
+        $value = 'on';
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.status = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
+
+
+
     //    public function findOneBySomeField($value): ?Account
     //    {
     //        return $this->createQueryBuilder('a')

@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\Client;
 use App\Repository\ClientRepository;
+use App\Repository\ContratRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,6 +32,28 @@ final class ClientApiController extends AbstractController
 
         return new JsonResponse($jsonClient, Response::HTTP_OK, [], true);
     }
+
+
+    #[Route('/{id}/add/contrat', name: 'api_client_add_contrat', methods: ['POST'])]
+    public function addContract(Client $client, Request $request, EntityManagerInterface $entityManager, ContratRepository $contratRepository, SerializerInterface $serializer): Response
+    {
+
+        $now = new \DateTime();
+        $data = $request->toArray();
+        $contrat = $contratRepository->find($data['contrat']);
+        /* Façon par Désérialisation */
+
+        $client
+            ->setUpdatedAt($now)
+            ->addContrat($contrat);
+
+        $entityManager->persist($client);
+        $entityManager->flush();
+        $jsonClient =
+            $serializer->serialize($client, 'json', ['groups' => ['client']]);
+        return new JsonResponse($jsonClient, Response::HTTP_OK, [], true);
+    }
+
 
     #[Route('/new', name: 'api_client_new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse

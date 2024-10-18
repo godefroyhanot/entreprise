@@ -21,7 +21,7 @@ final class AccountApiController extends AbstractController
     #[Route(name: 'api_account_index', methods: ['GET'])]
     public function index(AccountRepository $accountRepository, SerializerInterface $serializer): JsonResponse
     {
-        $listAccounts = $accountRepository->findAll();
+        $listAccounts = $accountRepository->findByStatus();
         $jsonAccounts = $serializer->serialize($listAccounts, 'json', ["groups" => 'account']);
         return new JsonResponse($jsonAccounts, Response::HTTP_OK, [], true);
     }
