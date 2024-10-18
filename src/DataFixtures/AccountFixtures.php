@@ -6,10 +6,12 @@ use DateTime;
 use Faker\Factory;
 use Faker\Generator;
 use App\Entity\Account;
+use App\DataFixtures\ClientFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class AccountFixtures extends Fixture
+class AccountFixtures extends Fixture implements DependentFixtureInterface
 {
 
     public const PREFIX = "account#";
@@ -29,11 +31,20 @@ class AccountFixtures extends Fixture
     }
     public function load(ObjectManager $manager): void
     {
+        $prefixClient = ClientFixtures::PREFIX;
+
+        $clients = [];
+        for ($i = ClientFixtures::POOL_MIN; $i < ClientFixtures::POOL_MAX; $i++) {
+            $clients[] = $prefixClient . $i;
+        }
 
 
         $now = new DateTime();
         $accounts = [];
         for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
+
+            $client = $this->getReference($clients[array_rand($clients, 1)]);
+
 
 
             $dateCreated = $this->faker->dateTimeInInterval('-1 week', '+1 week');
@@ -45,6 +56,7 @@ class AccountFixtures extends Fixture
                 ->setPassword($this->faker->password())
                 ->setCreatedAt($dateCreated)
                 ->setUpdatedAt($dateUpdated)
+                ->setClient($client)
                 ->setStatus("on")
             ;
             $manager->persist($account);
@@ -56,5 +68,13 @@ class AccountFixtures extends Fixture
 
 
         $manager->flush();
+    }
+
+
+    public function getDependencies()
+    {
+        return [
+            ClientFixtures::class,
+        ];
     }
 }
