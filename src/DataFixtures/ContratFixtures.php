@@ -65,6 +65,11 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
             $productTypes[] = $prefixProduct . $i;
         }
 
+        for ($i = ProductFixtures::POOL_MIN; $i < ProductFixtures::POOL_MAX; $i++) {
+            //Add prefix to ProductTypes Array 
+            $productTypes[] = $prefixProduct . $i;
+        }
+
         $contrats = [];
 
         for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
@@ -115,6 +120,9 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             ContratTypeFixtures::class,
+            ProductFixtures::class,
+            ClientFixtures::class,
+            FacturationFixtures::class,
         ];
     }
 }

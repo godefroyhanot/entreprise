@@ -25,16 +25,26 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
+
     /**
      * @var Collection<int, Contrat>
      */
     #[ORM\ManyToMany(targetEntity: Contrat::class, mappedBy: 'product')]
     private Collection $contrats;
 
+
+    #[ORM\Column(nullable: true)]
+    private ?int $quantity = null;
+
+    #[ORM\ManyToOne]
+    private ?QuantityType $quantityType = null;
+
+
     public function __construct()
     {
         $this->contrats = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -77,6 +87,8 @@ class Product
         return $this;
     }
 
+
+
     /**
      * @return Collection<int, Contrat>
      */
@@ -100,6 +112,31 @@ class Product
         if ($this->contrats->removeElement($contrat)) {
             $contrat->removeProduct($this);
         }
+
+        return $this;
+    }
+
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity): static
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getQuantityType(): ?QuantityType
+    {
+        return $this->quantityType;
+    }
+
+    public function setQuantityType(?QuantityType $quantityType): static
+    {
+        $this->quantityType = $quantityType;
 
         return $this;
     }
