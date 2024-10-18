@@ -12,14 +12,15 @@ class ContactLinkFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $now = new DateTime();
-
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; $i++) { 
             $contactLink = new ContactLink();
-            $contactLink->setValue("http://example.com/contact-link-entity-" . $i)
-                ->setCreatedAt($now)
-                ->setUpdatedAt($now)
-                ->setStatus($i % 2 == 0 ? 'active' : 'inactive');
-            $manager->persist($contactLink);
+            $contactLink->setValue("http://example.com/contact-link-" . $i) 
+                        ->setCreatedAt($now) // Date actuelle
+                        ->setUpdatedAt($now) // Date actuelle
+                        ->setStatus($i % 2 == 0 ? 'on' : 'off'); 
+            
+            $manager->persist($contactLink); 
+
         }
 
         $manager->flush();
