@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ContratType index{% endblock %}
+
+{% block body %}
+    <h1>ContratType index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>Status</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for contrat_type in contrat_types %}
+            <tr>
+                <td>{{ contrat_type.id }}</td>
+                <td>{{ contrat_type.name }}</td>
+                <td>{{ contrat_type.createdAt ? contrat_type.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ contrat_type.updatedAt ? contrat_type.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ contrat_type.status }}</td>
+                <td>
+                    <a href="{{ path('app_contrat_type_show', {'id': contrat_type.id}) }}">show</a>
+                    <a href="{{ path('app_contrat_type_edit', {'id': contrat_type.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_contrat_type_new') }}">Create new</a>
+{% endblock %}

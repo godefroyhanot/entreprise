@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ContratType{% endblock %}
+
+{% block body %}
+    <h1>Create new ContratType</h1>
+
+    {{ include('contrat_type/_form.html.twig') }}
+
+    <a href="{{ path('app_contrat_type_index') }}">back to list</a>
+{% endblock %}
