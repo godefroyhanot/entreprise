@@ -134,9 +134,9 @@ final class AccountApiController extends AbstractController
             $entityManager->remove($account);
         } else {
             $account->setStatus('off');
+            $account->setUpdatedAt(new \DateTime());
             $entityManager->persist($account);
         }
-
 
         $entityManager->flush();
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);

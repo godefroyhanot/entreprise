@@ -71,14 +71,20 @@ final class ClientApiController extends AbstractController
     }
 
     #[Route('/{id}', name: 'api_client_delete', methods: ['DELETE'])]
-    public function delete(Client $client, EntityManagerInterface $entityManager): JsonResponse
+    public function delete(Request $request, Client $client, EntityManagerInterface $entityManager): JsonResponse
     {
         // Désactiver le client en changeant son statut
-        $client->setStatus('off');
-        $client->setUpdatedAt(new \DateTime());
 
-        $entityManager->persist($client);
+        $data = $request->toArray();
+        if (isset($data['force']) && $data["force"] === true) {
+            $entityManager->remove($client);
+        } else {
+            $client->setStatus('off');
+            $client->setUpdatedAt(new \DateTime());
+            $entityManager->persist($client);
+        }
         $entityManager->flush();
+
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
