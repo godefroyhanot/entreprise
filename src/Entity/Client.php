@@ -15,34 +15,37 @@ class Client
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['account'])]
-
+    #[Groups(['client', 'account'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['account'])]
-
+    #[Groups(['client', 'account'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['client'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['client'])]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(length: 25)]
+    #[Groups(['client'])]
     private ?string $status = null;
 
     /**
      * @var Collection<int, Contrat>
      */
-    #[ORM\OneToMany(targetEntity: Contrat::class, mappedBy: 'client')]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Contrat::class)]
+    #[Groups(['client'])]
     private Collection $contrats;
 
     /**
      * @var Collection<int, Account>
      */
-    #[ORM\OneToMany(targetEntity: Account::class, mappedBy: 'client')]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Account::class)]
+    #[Groups(['client'])]
     private Collection $accounts;
 
     public function __construct()
@@ -50,6 +53,8 @@ class Client
         $this->contrats = new ArrayCollection();
         $this->accounts = new ArrayCollection();
     }
+
+    // Getters et Setters
 
     public function getId(): ?int
     {
@@ -125,7 +130,7 @@ class Client
     public function removeContrat(Contrat $contrat): static
     {
         if ($this->contrats->removeElement($contrat)) {
-            // set the owning side to null (unless already changed)
+            // Set the owning side to null (unless already changed)
             if ($contrat->getClient() === $this) {
                 $contrat->setClient(null);
             }
@@ -155,7 +160,7 @@ class Client
     public function removeAccount(Account $account): static
     {
         if ($this->accounts->removeElement($account)) {
-            // set the owning side to null (unless already changed)
+            // Set the owning side to null (unless already changed)
             if ($account->getClient() === $this) {
                 $account->setClient(null);
             }
