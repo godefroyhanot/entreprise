@@ -2,27 +2,20 @@
 
 namespace App\Entity;
 
-use App\Repository\InfoRepository;
+use App\Repository\ContactLinkEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: InfoRepository::class)]
-class Info
+#[ORM\Entity(repositoryClass: ContactLinkEntityRepository::class)]
+class ContactLinkEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?bool $isAnonymous = null;
-
-    #[ORM\ManyToOne(targetEntity: InfoType::class, inversedBy: 'infos')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?InfoType $type = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $info = null;
+    #[ORM\Column(length: 255)]
+    private ?string $value = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -30,7 +23,7 @@ class Info
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 25)]
     private ?string $status = null;
 
     public function getId(): ?int
@@ -38,38 +31,14 @@ class Info
         return $this->id;
     }
 
-    public function isAnonymous(): ?bool
+    public function getValue(): ?string
     {
-        return $this->isAnonymous;
+        return $this->value;
     }
 
-    public function setAnonymous(bool $isAnonymous): static
+    public function setValue(string $value): static
     {
-        $this->isAnonymous = $isAnonymous;
-
-        return $this;
-    }
-
-    public function getType(): ?InfoType
-    {
-        return $this->type;
-    }
-
-    public function setType(?InfoType $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getInfo(): ?string
-    {
-        return $this->info;
-    }
-
-    public function setInfo(string $info): static
-    {
-        $this->info = $info;
+        $this->value = $value;
 
         return $this;
     }

@@ -44,6 +44,7 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
         $productTypes = [];
 
 
+
         $isDone = false;
 
         for ($i = ContratTypeFixtures::POOL_MIN; $i < ContratTypeFixtures::POOL_MAX; $i++) {
@@ -57,6 +58,7 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
         for ($i = FacturationFixtures::POOL_MIN; $i < FacturationFixtures::POOL_MAX; $i++) {
             //Add prefix to factureTypes Array 
             $factureTypes[] = $prefixFacture . $i;
+
         }
         for ($i = ProductFixtures::POOL_MIN; $i < ProductFixtures::POOL_MAX; $i++) {
             //Add prefix to ProductTypes Array 
@@ -81,6 +83,7 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
 
 
 
+
             $dateCreated = $this->faker->dateTimeInInterval('-1 week', '+1 week');
             $dateStarted = $this->faker->dateTimeInInterval('-1 year', '+1 year');
             $dateUpdated = $this->faker->dateTimeBetween($dateCreated, $now);
@@ -97,6 +100,7 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
                 ->setClient($clientType)
                 ->addFacture($factureType)
                 ->addProduct($productType)
+
                 ->setStatus("on")
             ;
             $manager->persist($contrat);

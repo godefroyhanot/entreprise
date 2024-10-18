@@ -51,6 +51,7 @@ class Contrat
     #[ORM\ManyToMany(targetEntity: Facturation::class, inversedBy: 'contrats')]
     private Collection $facture;
 
+
     /**
      * @var Collection<int, Product>
      */
@@ -228,3 +229,4 @@ class Contrat
     }
     
 }
+
