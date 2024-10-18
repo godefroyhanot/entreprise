@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\QuantityTypeRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: QuantityTypeRepository::class)]
 class QuantityType
@@ -12,9 +13,12 @@ class QuantityType
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['quantityType', 'product'])]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 16)]
+    #[Groups(['quantityType', 'product'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
