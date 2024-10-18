@@ -23,15 +23,12 @@ class Client
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['client'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['client'])]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(length: 25)]
-    #[Groups(['client'])]
     private ?string $status = null;
 
     /**
