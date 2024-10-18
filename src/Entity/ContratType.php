@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ContratTypeRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ContratTypeRepository::class)]
 class ContratType
@@ -12,8 +13,10 @@ class ContratType
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['contrat','client','facturation','product','contratType'])]
     private ?int $id = null;
 
+    #[Groups(['contrat','client','facturation','contratType'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

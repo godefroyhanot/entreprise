@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ContratRepository::class)]
 class Contrat
@@ -14,14 +15,18 @@ class Contrat
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['contrat', 'client', 'facturation', 'product', 'contratType'])]
     private ?int $id = null;
 
+    #[Groups(['contrat', 'client', 'facturation'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups(['contrat', 'contratType'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $startAt = null;
 
+    #[Groups(['contrat', 'contratType'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $endAt = null;
 
@@ -34,13 +39,15 @@ class Contrat
     #[ORM\Column(length: 25)]
     private ?string $status = null;
 
+    #[Groups(['contrat', 'contratType'])]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?ContratType $type = null;
-    
+
     #[ORM\Column]
     private ?bool $isDone = null;
 
+    #[Groups(['contrat', 'account'])]
     #[ORM\ManyToOne(inversedBy: 'contrats')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
@@ -105,7 +112,7 @@ class Contrat
         return $this;
     }
 
-    
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -227,6 +234,4 @@ class Contrat
 
         return $this;
     }
-    
 }
-

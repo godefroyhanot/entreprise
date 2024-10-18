@@ -18,11 +18,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route('/api/account')]
 final class AccountApiController extends AbstractController
 {
-
     #[Route(name: 'api_account_index', methods: ['GET'])]
     public function index(AccountRepository $accountRepository, SerializerInterface $serializer): JsonResponse
     {
-        $listAccounts = $accountRepository->findAll();
+        $listAccounts = $accountRepository->findByStatus();
         $jsonAccounts = $serializer->serialize($listAccounts, 'json', ["groups" => 'account']);
         return new JsonResponse($jsonAccounts, Response::HTTP_OK, [], true);
     }
@@ -80,7 +79,6 @@ final class AccountApiController extends AbstractController
 
         $entityManager->persist($newAccount);
         $entityManager->flush();
-
         $jsonAccount = $serializer->serialize($newAccount, 'json', ['groups' => ['account']]);
 
         return new JsonResponse($jsonAccount, Response::HTTP_CREATED, [], true);
@@ -95,12 +93,12 @@ final class AccountApiController extends AbstractController
 
         $data = $request->toArray();
         $client = $clientRepository->find($data["client"]);
-
+        $createdAt = $account->getCreatedAt();
         /* Façon par Deserialisation */
         $updatedAccount = $serializer->deserialize($request->getContent(), Account::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $account]);
         $updatedAccount
             ->setClient($client)
-            ->setCreatedAt($now)
+            ->setCreatedAt($createdAt)
             ->setUpdatedAt($now)
             ->setStatus("on")
         ;
@@ -135,9 +133,9 @@ final class AccountApiController extends AbstractController
             $entityManager->remove($account);
         } else {
             $account->setStatus('off');
+            $account->setUpdatedAt(new \DateTime());
             $entityManager->persist($account);
         }
-
 
         $entityManager->flush();
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);

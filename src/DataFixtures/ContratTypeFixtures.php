@@ -35,7 +35,7 @@ class ContratTypeFixtures extends Fixture
         for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
             $contratType = new ContratType();
             $contratType
-                ->setName($this->faker->sentence(3))
+                ->setName($this->faker->lexify('type-??????????'))
                 ->setCreatedAt($dateCreated)
                 ->setUpdatedAt($dateUpdated)
                 ->setStatus("on")

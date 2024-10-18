@@ -15,11 +15,11 @@ class Client
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['client', 'account'])]
+    #[Groups(['client', 'account', 'contrat'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['client', 'account'])]
+    #[Groups(['client', 'account', 'contrat'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
