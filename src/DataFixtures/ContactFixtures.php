@@ -5,7 +5,6 @@ namespace App\DataFixtures;
 use Faker\Factory;
 use Faker\Generator;
 use App\Entity\Contact;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Doctrine\Persistence\ObjectManager;
@@ -45,7 +44,6 @@ class ContactFixtures extends Fixture implements DependentFixtureInterface
                 ->setName($this->faker->firstName())
                 ->setCreatedAt(new \DateTime())
                 ->setUpdatedAt(new \DateTime())
-                ->setClient($client)
                 ->setStatus('on');
             $manager->persist($contact);
             $this->addReference(self::PREFIX . $i, $contact);
