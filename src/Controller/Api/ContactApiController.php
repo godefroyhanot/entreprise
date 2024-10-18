@@ -3,20 +3,16 @@
 namespace App\Controller\Api;
 
 use App\Entity\Contact;
-use App\Form\ContactType;
 use App\Repository\ClientRepository;
 use App\Repository\ContactRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use function Symfony\Component\String\s;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Validator\Constraints\Json;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Loader\Configurator\serializer;
 
 #[Route('/api/contact')]
 final class ContactApiController extends AbstractController
@@ -35,10 +31,9 @@ final class ContactApiController extends AbstractController
     {
         $jsonContact = $serializer->serialize($contact, 'json', ['groups' => ['contact']]);
         return new JsonResponse($jsonContact, Response::HTTP_OK, [], true);
-
     }
 
-    #[Route('/new', name: 'api_contact_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'api_contact_new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ClientRepository $clientRepository, SerializerInterface $serializer): JsonResponse
     {
         $now = new \DateTime();
@@ -48,8 +43,12 @@ final class ContactApiController extends AbstractController
 
         $newContact = $serializer->deserialize($request->getContent(), Contact::class, 'json', []);
         $newContact
-            ->setClient($client)
-            ->setCreatedAt($now);
+            // ->setClient($client)
+            ->setCreatedAt($now)
+            ->setUpdatedAt($now)
+            ->setStatus("on")
+
+        ;
 
         $entityManager->persist($newContact);
         $entityManager->flush();
@@ -57,30 +56,30 @@ final class ContactApiController extends AbstractController
         $jsonContact = $serializer->serialize($newContact, 'json', ['groups' => ['contact']]);
 
         return new JsonResponse($jsonContact, Response::HTTP_CREATED, [], true);
-  
     }
 
-    #[Route('/{id}/edit', name: 'api_contact_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Contact $contact, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/{id}/edit', name: 'api_contact_edit', methods: ['PUT', 'PATCH'])]
+    public function edit(Request $request, Contact $contact, EntityManagerInterface $entityManager, ClientRepository $clientRepository, SerializerInterface $serializer): JsonResponse
     {
         $now = new \DateTime();
 
         $data = $request->toArray();
         $client = $clientRepository->find($data["client"]);
+        $createdAt = $contact->getCreatedAt();
 
         $updateContact = $serializer->deserialize($request->getContent(), Contact::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $contact]);
         $updateContact
-            ->setClient($client)
+            // ->setClient($client) 
+            ->setCreatedAt($createdAt)
             ->setUpdatedAt($now);
 
         $entityManager->persist($updateContact);
         $entityManager->flush();
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
-
     }
 
-    #[Route('/{id}', name: 'api_contact_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'api_contact_delete', methods: ['DELETE'])]
     public function delete(Request $request, Contact $contact, EntityManagerInterface $entityManager): Response
     {
         $data = $request->toArray();
