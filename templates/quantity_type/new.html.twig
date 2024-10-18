@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New QuantityType{% endblock %}
+
+{% block body %}
+    <h1>Create new QuantityType</h1>
+
+    {{ include('quantity_type/_form.html.twig') }}
+
+    <a href="{{ path('app_quantity_type_index') }}">back to list</a>
+{% endblock %}
