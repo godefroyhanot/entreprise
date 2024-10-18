@@ -11,6 +11,10 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 class ProductFixtures extends Fixture
 {
 
+    public const PREFIX = "ProductType#";
+    public const POOL_MAX = 5;
+    public const POOL_MIN = 0;
+
 
     private Generator $faker;
     public function __construct()
@@ -33,4 +37,5 @@ class ProductFixtures extends Fixture
 
         $manager->flush();
     }
+
 }
