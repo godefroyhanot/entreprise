@@ -23,7 +23,7 @@ final class ClientApiController extends AbstractController
         return new JsonResponse($jsonClients, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/{id<\d+>}', name: 'api_client_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'api_client_show', methods: ['GET'])]
     public function show(Client $client, SerializerInterface $serializer): Response
     {
         $jsonClient = $serializer->serialize($client, 'json', ['groups' => ['client']]);
