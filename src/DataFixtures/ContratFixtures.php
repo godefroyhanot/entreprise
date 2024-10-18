@@ -40,6 +40,10 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
         $prefixFacture = FacturationFixtures::PREFIX;
         $factureTypes = [];
 
+        $prefixProduct = ProductFixtures::PREFIX;
+        $productTypes = [];
+
+
 
         $isDone = false;
 
@@ -54,6 +58,16 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
         for ($i = FacturationFixtures::POOL_MIN; $i < FacturationFixtures::POOL_MAX; $i++) {
             //Add prefix to factureTypes Array 
             $factureTypes[] = $prefixFacture . $i;
+
+        }
+        for ($i = ProductFixtures::POOL_MIN; $i < ProductFixtures::POOL_MAX; $i++) {
+            //Add prefix to ProductTypes Array 
+            $productTypes[] = $prefixProduct . $i;
+        }
+
+        for ($i = ProductFixtures::POOL_MIN; $i < ProductFixtures::POOL_MAX; $i++) {
+            //Add prefix to ProductTypes Array 
+            $productTypes[] = $prefixProduct . $i;
         }
 
         $contrats = [];
@@ -68,6 +82,9 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
             $clientType = $this->getReference($clientTypes[array_rand($clientTypes, 1)]);
             //Pick a random factureType reference;
             $factureType = $this->getReference($factureTypes[array_rand($factureTypes, 1)]);
+            //Pick a random ProductType reference;
+            $productType = $this->getReference($productTypes[array_rand($productTypes, 1)]);
+
 
 
 
@@ -87,6 +104,8 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
                 ->setType($contratType)
                 ->setClient($clientType)
                 ->addFacture($factureType)
+                ->addProduct($productType)
+
                 ->setStatus("on")
             ;
             $manager->persist($contrat);
@@ -101,6 +120,9 @@ class ContratFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             ContratTypeFixtures::class,
+            ProductFixtures::class,
+            ClientFixtures::class,
+            FacturationFixtures::class,
         ];
     }
 }

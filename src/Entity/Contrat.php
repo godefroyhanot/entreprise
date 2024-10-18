@@ -51,9 +51,17 @@ class Contrat
     #[ORM\ManyToMany(targetEntity: Facturation::class, inversedBy: 'contrats')]
     private Collection $facture;
 
+
+    /**
+     * @var Collection<int, Product>
+     */
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'contrats')]
+    private Collection $product;
+
     public function __construct()
     {
         $this->facture = new ArrayCollection();
+        $this->product = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,5 +203,30 @@ class Contrat
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProduct(): Collection
+    {
+        return $this->product;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->product->contains($product)) {
+            $this->product->add($product);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        $this->product->removeElement($product);
+
+        return $this;
+    }
     
 }
+

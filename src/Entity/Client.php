@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
@@ -14,9 +15,11 @@ class Client
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['client', 'account'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['client', 'account'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -31,13 +34,24 @@ class Client
     /**
      * @var Collection<int, Contrat>
      */
-    #[ORM\OneToMany(targetEntity: Contrat::class, mappedBy: 'client')]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Contrat::class)]
+    #[Groups(['client'])]
     private Collection $contrats;
+
+    /**
+     * @var Collection<int, Account>
+     */
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Account::class)]
+    #[Groups(['client'])]
+    private Collection $accounts;
 
     public function __construct()
     {
         $this->contrats = new ArrayCollection();
+        $this->accounts = new ArrayCollection();
     }
+
+    // Getters et Setters
 
     public function getId(): ?int
     {
@@ -113,9 +127,39 @@ class Client
     public function removeContrat(Contrat $contrat): static
     {
         if ($this->contrats->removeElement($contrat)) {
-            // set the owning side to null (unless already changed)
+            // Set the owning side to null (unless already changed)
             if ($contrat->getClient() === $this) {
                 $contrat->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Account>
+     */
+    public function getAccounts(): Collection
+    {
+        return $this->accounts;
+    }
+
+    public function addAccount(Account $account): static
+    {
+        if (!$this->accounts->contains($account)) {
+            $this->accounts->add($account);
+            $account->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccount(Account $account): static
+    {
+        if ($this->accounts->removeElement($account)) {
+            // Set the owning side to null (unless already changed)
+            if ($account->getClient() === $this) {
+                $account->setClient(null);
             }
         }
 

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AccountRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
 class Account
@@ -12,15 +13,22 @@ class Account
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['account', 'client'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['account', 'client'])]
+
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['account', 'client'])]
+
     private ?string $url = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['account', 'client'])]
+
     private ?string $password = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -31,6 +39,12 @@ class Account
 
     #[ORM\Column(length: 25)]
     private ?string $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'accounts')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['account'])]
+
+    private ?Client $client = null;
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +119,18 @@ class Account
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
 
         return $this;
     }

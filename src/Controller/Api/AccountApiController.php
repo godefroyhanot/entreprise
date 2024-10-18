@@ -21,7 +21,7 @@ final class AccountApiController extends AbstractController
     public function index(AccountRepository $accountRepository, SerializerInterface $serializer): Response
     {
         $listAccounts = $accountRepository->findAll();
-        $jsonAccounts = $serializer->serialize($listAccounts, 'json', []);
+        $jsonAccounts = $serializer->serialize($listAccounts, 'json', ["groups" => 'account']);
         return new JsonResponse($jsonAccounts, Response::HTTP_OK, [], true);
     }
 
@@ -29,7 +29,7 @@ final class AccountApiController extends AbstractController
     public function show(Account $account, SerializerInterface $serializer): Response
     {
 
-        $jsonAccount = $serializer->serialize($account, 'json', []);
+        $jsonAccount = $serializer->serialize($account, 'json', ["groups" => 'account']);
 
         return new JsonResponse($jsonAccount, Response::HTTP_OK, [], true);
     }
