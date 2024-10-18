@@ -14,9 +14,8 @@ class ContactFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
 
+
         $contactsData = [];
-
-
         for ($i = self::POOL_MIN; $i < self::POOL_MAX; $i++) {
             $contact = new Contact();
             $contact
@@ -26,8 +25,9 @@ class ContactFixtures extends Fixture
                 ->setStatus('on');
             $manager->persist($contact);
             $this->addReference(self::PREFIX . $i, $contact);
+
         }
 
-        $manager->flush();
+        $manager->flush(); 
     }
 }
